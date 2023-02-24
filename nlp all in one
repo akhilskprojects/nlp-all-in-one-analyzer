@@ -1,0 +1,93 @@
+import nltk
+from collections import Counter
+import tkinter as tk
+
+def wordmaker(sentence):
+    # TOKENIZATION OF WORDS
+    words = nltk.word_tokenize(sentence)
+    return words
+
+def makelower(words):
+    # CONVERSION INTO Lower case Alphabet
+    words = [word.lower() for word in words]
+    return words
+
+def stopwordremove(words):
+    #STOP WORD REMOVAL 
+    stop_words = set(nltk.corpus.stopwords.words('english'))
+    words = [word for word in words if word not in stop_words]
+    return words
+
+def pos_tager(words):
+    #POS TAGGING
+    postag = nltk.pos_tag(words)
+    return postag
+
+def namedentity(postag):
+    #Named Entity Recognition
+    nentity = nltk.ne_chunk(postag)
+    return nentity
+
+def wordfreq(words):
+    # WORD FREQUENCY FINDER
+    word_freq = Counter(words)
+    return word_freq
+
+def mostfreqofwordfreqs(word_freq, n=4):
+    # RETURN MOST FREQUENT WORDS
+    top_words = word_freq.most_common(n)
+    return top_words
+
+
+def finalanalysis():
+
+    sentence = sentence_entry.get()
+
+    words = wordmaker(sentence)
+    words = makelower(words)
+    words = stopwordremove(words)
+    word_freq = wordfreq(words)
+    stop_words = mostfreqofwordfreqs(word_freq)
+    
+    words_label.config(text=f"Tokenization : {words}")
+    word_freq_label.config(text=f"Word frequencies: {word_freq}")
+    top_words_label.config(text=f"Top 5 frequent words: {stop_words}")
+    num_words_label.config(text=f"Total no of words: {len(words)}")
+
+window = tk.Tk()
+window.title("NLP Analyzer")
+
+
+sentence_frame = tk.Frame(window)
+sentence_frame.pack(padx=20, pady=10)
+sentence_label = tk.Label(sentence_frame, text="Enter a sentence:", font=("Arial", 14))
+sentence_label.pack(side=tk.LEFT, padx=5)
+sentence_entry = tk.Entry(sentence_frame, font=("Arial", 14), width=30)
+sentence_entry.pack(side=tk.LEFT)
+
+analyze_button = tk.Button(window, text="Analyze", command=finalanalysis)
+analyze_button.pack(pady=10)
+
+output_frame = tk.Frame(window)
+output_frame.pack(padx=20, pady=10)
+
+
+words_label = tk.Label(window, text="", font=("Arial", 12), justify=tk.LEFT)
+words_label.pack() 
+word_freq_label = tk.Label(window, text="", font=("Arial", 12), justify=tk.LEFT)
+word_freq_label.pack()
+top_words_label = tk.Label(window, text="", font=("Arial", 12), justify=tk.LEFT)
+top_words_label.pack()
+num_words_label = tk.Label(window, text="", font=("Arial", 12), justify=tk.LEFT)
+num_words_label.pack()
+
+
+window.mainloop()
+
+
+
+
+
+
+
+
